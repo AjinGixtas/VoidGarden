@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1igsarldv2ns"]
+
+[ext_resource type="Script" path="res://Scripts/Orb.gd" id="1_g4xel"]
+[ext_resource type="Texture2D" uid="uid://bfu03rfkshpb1" path="res://Sprites/Orb.png" id="1_qexfc"]
+
+[node name="Orb" type="Node2D" groups=["orb"]]
+script = ExtResource("1_g4xel")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = -1
+texture = ExtResource("1_qexfc")
+
+[node name="FadeTimer" type="Timer" parent="."]

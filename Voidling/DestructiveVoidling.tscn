@@ -1,0 +1,321 @@
+[gd_scene load_steps=25 format=3 uid="uid://c7wuh8t4hcvbl"]
+
+[ext_resource type="Script" path="res://Scripts/DestructiveVoidling.gd" id="1_wt3qn"]
+[ext_resource type="Texture2D" uid="uid://bts2corq2a4bj" path="res://Sprites/DestructiveVoidling.png" id="1_yost7"]
+[ext_resource type="PackedScene" uid="uid://b1igsarldv2ns" path="res://Scenes/Orb.tscn" id="2_lcv7t"]
+[ext_resource type="Shader" uid="uid://nkai2peqtx6a" path="res://Scripts/Shaders/DestructiveVoidling.tres" id="3_2jok8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ji1f"]
+resource_local_to_scene = true
+shader = ExtResource("3_2jok8")
+shader_parameter/BooleanParameter = false
+shader_parameter/ColorParameter = Color(1, 1, 1, 1)
+
+[sub_resource type="Animation" id="Animation_yu3n1"]
+resource_name = "Attack"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.4, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(4, 1), Vector2i(5, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationTree:parameters/conditions/isAttacking")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"attack_behavior"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_7kw6g"]
+resource_name = "Death"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2), Vector2i(3, 2)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"death_behavior"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:move_speed")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [16.0]
+}
+
+[sub_resource type="Animation" id="Animation_j72xt"]
+resource_name = "Move"
+length = 0.9
+loop_mode = 1
+step = 0.45
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.45),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2i(0, 0), Vector2i(1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_d4r5r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationTree:parameters/conditions/isAttacking")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:move_speed")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [8.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:material:shader_parameter/BooleanParameter")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AnimationTree:parameters/conditions/isTakingDamage")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_0ejvl"]
+resource_name = "TakingDamage"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/BooleanParameter")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationTree:parameters/conditions/isTakingDamage")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sku4f"]
+_data = {
+"Attack": SubResource("Animation_yu3n1"),
+"Death": SubResource("Animation_7kw6g"),
+"Move": SubResource("Animation_j72xt"),
+"RESET": SubResource("Animation_d4r5r"),
+"TakingDamage": SubResource("Animation_0ejvl")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tgwl1"]
+animation = &"Attack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jkd4i"]
+animation = &"Death"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kusus"]
+animation = &"Move"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l55gx"]
+animation = &"TakingDamage"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_va3ls"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_uoj3m"]
+advance_mode = 2
+advance_condition = &"isAttacking"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_58yg0"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_v4guv"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_o1yp2"]
+priority = 0
+switch_mode = 2
+advance_mode = 2
+advance_condition = &"isDead"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_140qr"]
+advance_mode = 2
+advance_condition = &"isTakingDamage"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ueli5"]
+advance_mode = 2
+advance_condition = &"isTakingDamage"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_k4dsf"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_nf6tv"]
+states/Attack/node = SubResource("AnimationNodeAnimation_tgwl1")
+states/Attack/position = Vector2(542, 205)
+states/Death/node = SubResource("AnimationNodeAnimation_jkd4i")
+states/Death/position = Vector2(745, 205)
+states/End/position = Vector2(954, 205)
+states/Move/node = SubResource("AnimationNodeAnimation_kusus")
+states/Move/position = Vector2(542, 100)
+states/Start/position = Vector2(396, 100)
+states/TakingDamage/node = SubResource("AnimationNodeAnimation_l55gx")
+states/TakingDamage/position = Vector2(745, 100)
+transitions = ["Start", "Move", SubResource("AnimationNodeStateMachineTransition_va3ls"), "Move", "Attack", SubResource("AnimationNodeStateMachineTransition_uoj3m"), "Death", "End", SubResource("AnimationNodeStateMachineTransition_58yg0"), "Attack", "Move", SubResource("AnimationNodeStateMachineTransition_v4guv"), "TakingDamage", "Death", SubResource("AnimationNodeStateMachineTransition_o1yp2"), "Move", "TakingDamage", SubResource("AnimationNodeStateMachineTransition_140qr"), "Attack", "TakingDamage", SubResource("AnimationNodeStateMachineTransition_ueli5"), "TakingDamage", "Move", SubResource("AnimationNodeStateMachineTransition_k4dsf")]
+graph_offset = Vector2(110, 13)
+
+[node name="DestructiveVoidling" type="Node2D"]
+script = ExtResource("1_wt3qn")
+orb_scene = ExtResource("2_lcv7t")
+move_speed = 8.0
+current_health = 5
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 48.0
+target_desired_distance = 48.0
+avoidance_enabled = true
+radius = 8.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_5ji1f")
+position = Vector2(2, -5)
+texture = ExtResource("1_yost7")
+hframes = 6
+vframes = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_sku4f")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_nf6tv")
+anim_player = NodePath("../AnimationPlayer")
+parameters/conditions/isAttacking = false
+parameters/conditions/isDead = false
+parameters/conditions/isTakingDamage = false
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+wait_time = 1.5
+autostart = true
+
+[node name="HuntCooldownTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[node name="UpdateHuntTargetPositionTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
+[connection signal="timeout" from="AttackCooldownTimer" to="." method="_on_attack_cooldown_timer_timeout"]
+[connection signal="timeout" from="HuntCooldownTimer" to="." method="_on_hunt_cooldown_timer_timeout"]
+[connection signal="timeout" from="UpdateHuntTargetPositionTimer" to="." method="_on_update_hunt_target_position_timer_timeout"]

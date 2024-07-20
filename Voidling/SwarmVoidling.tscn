@@ -1,0 +1,139 @@
+[gd_scene load_steps=14 format=3 uid="uid://deihp0ljg7lt2"]
+
+[ext_resource type="Script" path="res://Scripts/SwarmVoidling.gd" id="1_lc3ge"]
+[ext_resource type="Texture2D" uid="uid://cx5yyo4ghfqmf" path="res://Sprites/SwarmVoidling.png" id="1_phj1k"]
+[ext_resource type="PackedScene" uid="uid://b1igsarldv2ns" path="res://Scenes/Orb.tscn" id="2_d50v5"]
+
+[sub_resource type="Animation" id="Animation_m4owu"]
+resource_name = "Die"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(4, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [false],
+"method": &"set_process"
+}, {
+"args": [],
+"method": &"death_behavior"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_14gce"]
+resource_name = "Move"
+length = 0.9
+loop_mode = 1
+step = 0.45
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.45),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2i(0, 0), Vector2i(1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_wgg0y"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vot12"]
+_data = {
+"Die": SubResource("Animation_m4owu"),
+"Move": SubResource("Animation_14gce"),
+"RESET": SubResource("Animation_wgg0y")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2lx51"]
+animation = &"Die"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_e8c0q"]
+animation = &"Move"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_t4ajo"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_p2dmh"]
+advance_mode = 2
+advance_condition = &"isDead"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1bkm1"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_q0uwy"]
+states/Die/node = SubResource("AnimationNodeAnimation_2lx51")
+states/Die/position = Vector2(590, 100)
+states/Move/node = SubResource("AnimationNodeAnimation_e8c0q")
+states/Move/position = Vector2(459, 100)
+transitions = ["Start", "Move", SubResource("AnimationNodeStateMachineTransition_t4ajo"), "Move", "Die", SubResource("AnimationNodeStateMachineTransition_p2dmh"), "Die", "End", SubResource("AnimationNodeStateMachineTransition_1bkm1")]
+
+[node name="SwarmVoidling" type="Node2D"]
+script = ExtResource("1_lc3ge")
+orb_scene = ExtResource("2_d50v5")
+move_speed = 16.0
+current_health = 1
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 48.0
+target_desired_distance = 12.0
+avoidance_enabled = true
+radius = 8.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_phj1k")
+hframes = 5
+vframes = 2
+frame = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+process_mode = 3
+libraries = {
+"": SubResource("AnimationLibrary_vot12")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+process_mode = 3
+tree_root = SubResource("AnimationNodeStateMachine_q0uwy")
+anim_player = NodePath("../AnimationPlayer")
+parameters/conditions/isDead = false
+
+[node name="DuplicateTimer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
+[connection signal="timeout" from="DuplicateTimer" to="." method="_on_duplicate_timer_timeout"]
