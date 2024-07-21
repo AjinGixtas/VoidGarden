@@ -7,7 +7,6 @@ var hunt_target : Voidling = null
 func _ready():
 	voidling_manager = get_parent()
 	navigation_agent.target_position = voidling_manager.get_scout_target()
-
 func _process(delta):
 	if is_hunting:
 		get_hunt_target()

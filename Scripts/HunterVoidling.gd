@@ -31,6 +31,8 @@ func attack(): animation_tree.set("parameters/conditions/isAttacking", true)
 func attack_behavior(): 
 	if hunt_target == null: return 
 	hunt_target.modify_health(-2)
+	is_hunting = false
+	hunt_target = null
 func on_hunt_target_killed(_hunt_target : Voidling): 
 	hunt_target = null
 	is_hunting = false

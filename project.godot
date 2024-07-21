@@ -17,7 +17,13 @@ config/icon="res://icon.svg"
 
 [display]
 
+window/size/viewport_width=800
+window/size/viewport_height=600
 window/size/initial_position_type=0
+
+[dotnet]
+
+project/assembly_name="VoidGarden"
 
 [input]
 

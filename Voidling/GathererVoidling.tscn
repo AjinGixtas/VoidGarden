@@ -1,6 +1,13 @@
-[gd_scene load_steps=17 format=3 uid="uid://kylwjx7op8jc"]
+[gd_scene load_steps=24 format=3 uid="uid://kylwjx7op8jc"]
 
 [ext_resource type="Texture2D" uid="uid://qnvwtfmqos3q" path="res://Sprites/GathererVoidling.png" id="1_2km2b"]
+[ext_resource type="Script" path="res://Scripts/GathererVoidling.gd" id="1_wy51a"]
+[ext_resource type="Shader" uid="uid://nkai2peqtx6a" path="res://Scripts/Shaders/DestructiveVoidling.tres" id="2_ras47"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_23s6g"]
+shader = ExtResource("2_ras47")
+shader_parameter/BooleanParameter = false
+shader_parameter/ColorParameter = Color(1, 1, 1, 1)
 
 [sub_resource type="Animation" id="Animation_yr0yx"]
 resource_name = "CollectItem"
@@ -27,6 +34,32 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"collect_behavior"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:move_speed")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 16.0]
 }
 
 [sub_resource type="Animation" id="Animation_qu766"]
@@ -102,13 +135,78 @@ tracks/1/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:move_speed")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [32.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:material:shader_parameter/BooleanParameter")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AnimationTree:parameters/conditions/isTakingDamage")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_xsxbq"]
+resource_name = "TakingDamage"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/BooleanParameter")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationTree:parameters/conditions/isTakingDamage")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qfi3c"]
 _data = {
 "CollectItem": SubResource("Animation_yr0yx"),
 "Death": SubResource("Animation_qu766"),
 "Move": SubResource("Animation_ffnvd"),
-"RESET": SubResource("Animation_ka407")
+"RESET": SubResource("Animation_ka407"),
+"TakingDamage": SubResource("Animation_xsxbq")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_q3j08"]
@@ -119,6 +217,9 @@ animation = &"Death"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1xmlo"]
 animation = &"Move"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n62ck"]
+animation = &"TakingDamage"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_l4cpm"]
 advance_mode = 2
@@ -131,15 +232,24 @@ advance_condition = &"isCollecting"
 switch_mode = 2
 advance_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_a80sf"]
-advance_mode = 2
-advance_condition = &"isDead"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_q2sk7"]
-advance_mode = 2
-advance_condition = &"isDead"
-
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_w47tl"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_m0k26"]
+advance_mode = 2
+advance_condition = &"isTakingDamage"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ivenk"]
+advance_mode = 2
+advance_condition = &"isTakingDamage"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ddifb"]
+priority = 0
+advance_mode = 2
+advance_condition = &"isDead"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rbc5m"]
 switch_mode = 2
 advance_mode = 2
 
@@ -147,15 +257,27 @@ advance_mode = 2
 states/CollectItem/node = SubResource("AnimationNodeAnimation_q3j08")
 states/CollectItem/position = Vector2(503, 196)
 states/Death/node = SubResource("AnimationNodeAnimation_2eupf")
-states/Death/position = Vector2(702, 100)
+states/Death/position = Vector2(702, 196)
 states/Move/node = SubResource("AnimationNodeAnimation_1xmlo")
 states/Move/position = Vector2(503, 100)
-transitions = ["Start", "Move", SubResource("AnimationNodeStateMachineTransition_l4cpm"), "Move", "CollectItem", SubResource("AnimationNodeStateMachineTransition_w3jud"), "CollectItem", "Move", SubResource("AnimationNodeStateMachineTransition_2j3ne"), "Move", "Death", SubResource("AnimationNodeStateMachineTransition_a80sf"), "CollectItem", "Death", SubResource("AnimationNodeStateMachineTransition_q2sk7"), "Death", "End", SubResource("AnimationNodeStateMachineTransition_w47tl")]
-graph_offset = Vector2(-214, 22)
+states/TakingDamage/node = SubResource("AnimationNodeAnimation_n62ck")
+states/TakingDamage/position = Vector2(702, 100)
+transitions = ["Start", "Move", SubResource("AnimationNodeStateMachineTransition_l4cpm"), "Move", "CollectItem", SubResource("AnimationNodeStateMachineTransition_w3jud"), "CollectItem", "Move", SubResource("AnimationNodeStateMachineTransition_2j3ne"), "Death", "End", SubResource("AnimationNodeStateMachineTransition_w47tl"), "Move", "TakingDamage", SubResource("AnimationNodeStateMachineTransition_m0k26"), "CollectItem", "TakingDamage", SubResource("AnimationNodeStateMachineTransition_ivenk"), "TakingDamage", "Death", SubResource("AnimationNodeStateMachineTransition_ddifb"), "TakingDamage", "Move", SubResource("AnimationNodeStateMachineTransition_rbc5m")]
+graph_offset = Vector2(123, -4)
 
 [node name="GathererVoidling" type="Node2D"]
+script = ExtResource("1_wy51a")
+move_speed = 32.0
+current_health = 3
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 16.0
+target_desired_distance = 16.0
+avoidance_enabled = true
+radius = 1.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_23s6g")
 texture = ExtResource("1_2km2b")
 hframes = 9
 vframes = 3
@@ -170,3 +292,10 @@ tree_root = SubResource("AnimationNodeStateMachine_1wecp")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/isCollecting = false
 parameters/conditions/isDead = false
+parameters/conditions/isTakingDamage = false
+
+[node name="GatheringCooldownTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
+[connection signal="timeout" from="GatheringCooldownTimer" to="." method="_on_gathering_cooldown_timer_timeout"]

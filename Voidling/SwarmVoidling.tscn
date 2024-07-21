@@ -111,7 +111,7 @@ current_health = 1
 path_desired_distance = 48.0
 target_desired_distance = 12.0
 avoidance_enabled = true
-radius = 8.0
+radius = 1.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_phj1k")
@@ -132,7 +132,7 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/isDead = false
 
 [node name="DuplicateTimer" type="Timer" parent="."]
-wait_time = 10.0
+wait_time = 3.3
 autostart = true
 
 [connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]

@@ -276,13 +276,13 @@ graph_offset = Vector2(110, 13)
 script = ExtResource("1_wt3qn")
 orb_scene = ExtResource("2_lcv7t")
 move_speed = 8.0
-current_health = 5
+current_health = 3
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 path_desired_distance = 48.0
-target_desired_distance = 48.0
+target_desired_distance = 12.0
 avoidance_enabled = true
-radius = 8.0
+radius = 1.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 y_sort_enabled = true

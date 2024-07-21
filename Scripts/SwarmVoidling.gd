@@ -7,7 +7,7 @@ func _process(delta):
 		navigation_agent.target_position = voidling_manager.get_scout_target()
 	request_safe_velocity(delta)
 func _on_duplicate_timer_timeout():
-	voidling_manager.spawn_voidling(VoidlingManager.VOIDLING_TYPE.SWARM_VOIDLING, global_position)
+	voidling_manager.spawn_swarm(global_position)
 func death_behavior():
 	var orb : Orb = orb_scene.instantiate()
 	orb.global_position = global_position

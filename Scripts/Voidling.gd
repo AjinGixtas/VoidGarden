@@ -17,6 +17,7 @@ func modify_health(modifier : int):
 	animation_tree.set("parameters/conditions/isTakingDamage", true)
 	if current_health <= 0:
 		death.emit(self)
+		voidling_manager.on_voidling_killed(self)
 		animation_tree.set("parameters/conditions/isDead", true)
 func request_safe_velocity(delta : float):
 	navigation_agent.velocity = (navigation_agent.get_next_path_position() - global_position).normalized() * move_speed

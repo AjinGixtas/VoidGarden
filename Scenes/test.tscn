@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b2o85p3doyjtx"]
+[gd_scene load_steps=24 format=3 uid="uid://b2o85p3doyjtx"]
 
 [ext_resource type="Script" path="res://Scripts/VoidlingManager.gd" id="1_2cfm1"]
 [ext_resource type="PackedScene" uid="uid://c7wuh8t4hcvbl" path="res://Voidling/DestructiveVoidling.tscn" id="2_edqlh"]
@@ -11,28 +11,38 @@
 [ext_resource type="Script" path="res://Scripts/CreatureSelectionBoard.gd" id="8_07on8"]
 [ext_resource type="Texture2D" uid="uid://r83rfstsyils" path="res://Sprites/GathererVoidlingThumbnail.png" id="8_yw3y2"]
 [ext_resource type="FontFile" uid="uid://cn7l0dyaudxmw" path="res://pansyhand.ttf" id="9_8ss22"]
-[ext_resource type="Script" path="res://Scripts/VoidlingSelectionBox.gd" id="9_x0bjf"]
 [ext_resource type="Texture2D" uid="uid://b57thyebyimh6" path="res://Sprites/GrowthVoidlingThumbnail.png" id="9_y5g4l"]
 [ext_resource type="Texture2D" uid="uid://blwpgtro0pcwx" path="res://Sprites/SelectorContainer.png" id="10_5pv1e"]
 [ext_resource type="Texture2D" uid="uid://eawh5rw0ko3m" path="res://Sprites/HunterVoidlingThumbnail.png" id="10_mo4r7"]
+[ext_resource type="PackedScene" uid="uid://dsr00yapxn1be" path="res://Scenes/VoidlingSelectionButton.tscn" id="10_xc21d"]
 [ext_resource type="Texture2D" uid="uid://2iju4oplsapj" path="res://Sprites/SwarmVoidlingThumbnail.png" id="11_ab0y2"]
 [ext_resource type="Texture2D" uid="uid://blkqalm47r5sv" path="res://Sprites/DescriptionContainer.png" id="16_mc38o"]
+[ext_resource type="Texture2D" uid="uid://dne7jaddvlqv8" path="res://Sprites/CircleArrow.png" id="18_r528t"]
+[ext_resource type="Script" path="res://Scripts/RestartButton.gd" id="19_i302k"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_ptekj"]
-vertices = PackedVector2Array(278, 100, -278, 100, -278, -100, 278, -100)
+vertices = PackedVector2Array(191, 100, -190, 100, -190, -100, 191, -100)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-288, -110, -288, 110, 288, 110, 288, -110)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-200, -110, -200, 110, 201, 110, 201, -110)])
 source_geometry_group_name = &"navigation_polygon_source_group"
+
+[sub_resource type="LabelSettings" id="LabelSettings_b4852"]
+font = ExtResource("9_8ss22")
+font_size = 32
 
 [sub_resource type="LabelSettings" id="LabelSettings_pxvdb"]
 line_spacing = -5.0
 font = ExtResource("9_8ss22")
+font_size = 32
 font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vdcw5"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="Node2D" type="Node2D"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(0, 52)
+position = Vector2(0, 20)
 zoom = Vector2(2, 2)
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
@@ -40,9 +50,9 @@ navigation_polygon = SubResource("NavigationPolygon_ptekj")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="NavigationRegion2D"]
 z_index = -2
-offset_left = -278.0
+offset_left = -190.0
 offset_top = -100.0
-offset_right = 278.0
+offset_right = 190.0
 offset_bottom = 100.0
 texture = ExtResource("7_0nn6p")
 patch_margin_left = 6
@@ -57,26 +67,37 @@ script = ExtResource("1_2cfm1")
 voidling_scenes = Array[PackedScene]([ExtResource("2_edqlh"), ExtResource("3_g02h5"), ExtResource("4_0esb3"), ExtResource("5_ho43r"), ExtResource("6_t0oqt")])
 
 [node name="Node2D" type="Node2D" parent="NavigationRegion2D/VoidlingManager"]
-position = Vector2(128, 0)
+position = Vector2(190, -100)
 
 [node name="Node2D_2" type="Node2D" parent="NavigationRegion2D/VoidlingManager"]
-position = Vector2(-128, 0)
+position = Vector2(-134, 26)
 
 [node name="Node2D_3" type="Node2D" parent="NavigationRegion2D/VoidlingManager"]
-position = Vector2(-197, -126)
+position = Vector2(-166, -19)
 
 [node name="Node2D_4" type="Node2D" parent="NavigationRegion2D/VoidlingManager"]
 position = Vector2(0, -64)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="Label" type="Label" parent="CanvasLayer"]
+custom_minimum_size = Vector2(128, 32)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+text = "10"
+label_settings = SubResource("LabelSettings_b4852")
+
 [node name="Control" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("description_display")]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 3
-anchors_preset = 12
-anchor_top = 1.0
+anchor_top = 0.802
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 0.303955
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("8_07on8")
@@ -84,13 +105,11 @@ description_display = NodePath("HBoxContainer/NinePatchRect2/Control/Label")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control"]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -128.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 theme_override_constants/separation = 0
 
 [node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer/Control/HBoxContainer"]
@@ -106,193 +125,45 @@ axis_stretch_vertical = 1
 
 [node name="GridContainer" type="GridContainer" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect"]
 layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -48.0
-offset_right = 496.0
-offset_bottom = 48.0
-grow_vertical = 2
-columns = 5
-
-[node name="DestructiveVoidling" type="Control" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer" node_paths=PackedStringArray("creature_selection_board")]
-custom_minimum_size = Vector2(96, 96)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-script = ExtResource("9_x0bjf")
-creature_selection_board = NodePath("../../../..")
-
-[node name="Thumbnail" type="TextureRect" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/DestructiveVoidling"]
-clip_contents = true
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 6
-size_flags_stretch_ratio = 2.0
-texture = ExtResource("7_8ayua")
-expand_mode = 1
-stretch_mode = 1
-
-[node name="Button" type="Button" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/DestructiveVoidling"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
 grow_vertical = 2
+theme_override_constants/h_separation = 40
+columns = 5
 
-[node name="GathererVoidling" type="Control" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer" node_paths=PackedStringArray("creature_selection_board")]
-custom_minimum_size = Vector2(96, 96)
+[node name="VoidlingSelectionButton" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer" node_paths=PackedStringArray("creature_selection_board") instance=ExtResource("10_xc21d")]
 layout_mode = 2
-size_flags_horizontal = 5
-size_flags_vertical = 4
-script = ExtResource("9_x0bjf")
+texture = ExtResource("7_8ayua")
+creature_selection_board = NodePath("../../../..")
+
+[node name="VoidlingSelectionButton2" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer" node_paths=PackedStringArray("creature_selection_board") instance=ExtResource("10_xc21d")]
+layout_mode = 2
+texture = ExtResource("8_yw3y2")
 creature_selection_board = NodePath("../../../..")
 index = 1
 
-[node name="Thumbnail" type="TextureRect" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GathererVoidling"]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 6
-size_flags_stretch_ratio = 2.0
-texture = ExtResource("8_yw3y2")
-expand_mode = 1
-stretch_mode = 1
-
-[node name="Button" type="Button" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GathererVoidling"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="GrowthVoidling" type="Control" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer" node_paths=PackedStringArray("creature_selection_board")]
-custom_minimum_size = Vector2(96, 96)
+[node name="VoidlingSelectionButton3" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer" node_paths=PackedStringArray("creature_selection_board") instance=ExtResource("10_xc21d")]
 layout_mode = 2
-size_flags_horizontal = 5
-size_flags_vertical = 4
-script = ExtResource("9_x0bjf")
+texture = ExtResource("9_y5g4l")
 creature_selection_board = NodePath("../../../..")
 index = 2
 
-[node name="Thumbnail" type="TextureRect" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GrowthVoidling"]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 6
-size_flags_stretch_ratio = 2.0
-texture = ExtResource("9_y5g4l")
-expand_mode = 1
-stretch_mode = 1
-
-[node name="Button" type="Button" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GrowthVoidling"]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
-
-[node name="HunterVoidling" type="Control" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer" node_paths=PackedStringArray("creature_selection_board")]
-custom_minimum_size = Vector2(96, 96)
+[node name="VoidlingSelectionButton4" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer" node_paths=PackedStringArray("creature_selection_board") instance=ExtResource("10_xc21d")]
 layout_mode = 2
-size_flags_horizontal = 5
-size_flags_vertical = 4
-script = ExtResource("9_x0bjf")
+texture = ExtResource("10_mo4r7")
 creature_selection_board = NodePath("../../../..")
 index = 3
 
-[node name="Thumbnail" type="TextureRect" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/HunterVoidling"]
-clip_contents = true
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 6
-size_flags_stretch_ratio = 2.0
-texture = ExtResource("10_mo4r7")
-expand_mode = 1
-stretch_mode = 1
-
-[node name="Button" type="Button" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/HunterVoidling"]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
-
-[node name="SwarmVoidling" type="Control" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer" node_paths=PackedStringArray("creature_selection_board")]
-custom_minimum_size = Vector2(96, 96)
+[node name="VoidlingSelectionButton5" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer" node_paths=PackedStringArray("creature_selection_board") instance=ExtResource("10_xc21d")]
 layout_mode = 2
-size_flags_horizontal = 5
-size_flags_vertical = 4
-script = ExtResource("9_x0bjf")
+texture = ExtResource("11_ab0y2")
 creature_selection_board = NodePath("../../../..")
 index = 4
-
-[node name="Thumbnail" type="TextureRect" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/SwarmVoidling"]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 6
-size_flags_stretch_ratio = 2.0
-texture = ExtResource("11_ab0y2")
-expand_mode = 1
-stretch_mode = 1
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="CanvasLayer/Control/HBoxContainer"]
 layout_mode = 2
@@ -307,10 +178,13 @@ axis_stretch_vertical = 1
 
 [node name="Control" type="Control" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect2"]
 layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 33.0
 offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="Label" type="Label" parent="CanvasLayer/Control/HBoxContainer/NinePatchRect2/Control"]
@@ -323,16 +197,16 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dol"
 label_settings = SubResource("LabelSettings_pxvdb")
 autowrap_mode = 2
 metadata/_edit_use_anchors_ = true
 
-[connection signal="mouse_entered" from="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/DestructiveVoidling" to="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/DestructiveVoidling" method="_on_mouse_entered"]
-[connection signal="pressed" from="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/DestructiveVoidling/Button" to="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/DestructiveVoidling" method="_on_pressed"]
-[connection signal="mouse_entered" from="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GathererVoidling" to="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GathererVoidling" method="_on_mouse_entered"]
-[connection signal="pressed" from="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GathererVoidling/Button" to="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GathererVoidling" method="_on_pressed"]
-[connection signal="mouse_entered" from="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GrowthVoidling" to="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GrowthVoidling" method="_on_mouse_entered"]
-[connection signal="pressed" from="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GrowthVoidling/Button" to="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/GrowthVoidling" method="_on_pressed"]
-[connection signal="mouse_entered" from="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/HunterVoidling" to="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/HunterVoidling" method="_on_mouse_entered"]
-[connection signal="mouse_entered" from="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/SwarmVoidling" to="CanvasLayer/Control/HBoxContainer/NinePatchRect/GridContainer/SwarmVoidling" method="_on_mouse_entered"]
+[node name="Button" type="Button" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_vdcw5")
+icon = ExtResource("18_r528t")
+icon_alignment = 1
+script = ExtResource("19_i302k")
+
+[connection signal="pressed" from="CanvasLayer/Button" to="CanvasLayer/Button" method="_on_pressed"]
